@@ -1,0 +1,17 @@
+# .gitignore
+#
+# Ignore all
+*
+
+# But not
+!.gitignore
+
+# And not c source files 
+!*.c
+
+# And not makefiles
+!Makefile
+
+# And not directories
+!*/
+
