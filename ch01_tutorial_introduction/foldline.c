@@ -12,12 +12,20 @@
  *    something intelligent with very long lines, and if there are no
  *    blanks or tabs before the specified column.
  *
- * Note
+ * Notes
  *
- *    More needs to be done on this program but the basics have been
- *    fleshed out.
+ *    Can compare output to GNU core utility:
+ *    
+ *      fold -w 8 -s < some.txt
  *
- * Design
+ *    The variable len is always set to the index value of the next
+ *    free character in the array buffer. Once len is the same size as
+ *    the fold column the current contents of the buffer are printed
+ *    and the new character, if it is not a newline, is added to the
+ *    beginning of the buffer and the len variable is adjusted
+ *    appropriately.
+ *
+ *  Design
  *
  *    The desired line length should be specified as program option
  *    but for our purposes it is set using a symbolic constant.
@@ -28,6 +36,10 @@
  *      used to terminate the line like a new line. Here they will be
  *      left in the line and printed out but, then it is not possible
  *      to use any string functions like printf("%s", buffer).
+ *
+ * Todo
+ *
+ *    Sanity checking FOLD = 0 or FOLD < 0 or FOLD = 1
  *
  *    How to handle horizontal tabs (^I) in a line?
  *
@@ -41,16 +53,19 @@
  *
  */
 
-#define   FOLD    15        /* desired length of line */
+#define   FOLD    8        /* desired length of line */
 
+/* These booleans would be better handled with enum
+ */
 #define   TRUE     1
 #define   FALSE    0
 
 char buffer[FOLD];   /* hold a line plus a newline */
 
-void print_line(int nc);     /* print out the line in the buffer */
-
-int is_white(int c);    /* is white space */
+int  find_first(int from);    /* find first tab or space from right of buffer */
+void shift_left(int start);   /* shift contents of buffer from start to beginning */
+void print_line(int nc);      /* print out the line in the buffer */
+int is_white(int c);          /* is white space */
 
 int main()
 {
@@ -63,21 +78,30 @@ int main()
 
     while ((c = getchar()) != EOF)
     {
-        if (c == '\n' && len < FOLD)   /* end of line and fits in buffer */
+        if (c == '\n')              /* end of line */
         {
             print_line(len);
             len = 0;
             tos = -1;
         }
-        else if (len == FOLD)       /* end of line buffer full */
+        else if (len == FOLD)        /* buffer full and next char not a newline */
         {
-            print_line(FOLD);
-            buffer[0] = c;          /* add char to next line */
-            len = 1;                /* set for next char */
-            if (is_white(c))
-                tos = 0;
+            if (tos < 0)             /* no tabs or spaces in line */
+            {
+                print_line(FOLD);
+                buffer[0] = c;                 /* add char to next line */
+                len = 1;                       /* set for next char */
+                tos = (is_white(c)) ? 0 : -1;  /* is it a white space char */
+            }
             else
-                tos = -1;
+            {
+                print_line(tos);
+                shift_left(tos + 1);   /* from first non white space */
+                len = FOLD - tos -1;
+                buffer[len] = c;
+                tos = find_first(len);
+                ++len;
+            }
         }
         else
         {
@@ -87,6 +111,30 @@ int main()
             ++len;
         }
     }
+}
+
+/* function
+ *
+ *     find first tab or space from end of buffer
+ */
+int find_first(int from)
+{
+    int i;
+    for (i = from; i >= 0; --i)
+        if (is_white(buffer[i]))
+            return i;
+    return -1;
+}
+
+/* function
+ *
+ *     shift the buffer contents from start to the left
+ */
+void shift_left(int start)
+{
+    int i, j;
+    for (i = start, j = 0; i < FOLD; ++i, ++j)
+        buffer[j] = buffer[i];
 }
 
 /* function
@@ -108,9 +156,6 @@ void print_line(int nc)
  */
 int is_white(int c)
 {
-    if (c == ' ' || c == '\t')
-        return TRUE;
-    else
-        return FALSE;
+    return (c == ' ' || c == '\t') ? TRUE : FALSE;
 }
 
