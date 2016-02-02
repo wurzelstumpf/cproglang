@@ -12,6 +12,12 @@
 # And not makefiles
 !Makefile
 
+# And not markdown
+!*.md
+
+# And not the license
+!License
+
 # And not directories
 !*/
 
