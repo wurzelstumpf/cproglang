@@ -2,7 +2,7 @@
 
 CFLAGS = -Wall -g
 
-ExtVarsScope = detab entab foldline
+ExtVarsScope = detab entab foldline nocomment
 CharArrays = longestline longestlinelen eightycharsormore \
               trimwhitespace reverseline
 Functions = tempconvwithfunc
@@ -18,6 +18,7 @@ all: $(GettingStarted) $(VarsAndArithExprs) $(ForStatement) \
       $(SymbolicConstants) $(CharInOut) $(Arrays) $(Functions) \
        $(CharArrays) $(ExtVarsScope)
 
+nocomment:
 foldline:
 entab:
 detab:
