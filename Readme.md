@@ -10,6 +10,11 @@ exercises yourself and compare your program with the one in this
 repository (if it exists) to help further your understanding and
 learning.
 
+> Copyright (C) 2015,2016 Mark Matthews
+> Distributed under the terms of the GNU General Public License
+> With acknowledgement and thanks the Dennis Ritchie, Brian Kernighan
+> and other Contributors for the learning exercises
+
 ### TODO
 
   - Always something to work on and improve ;-)
