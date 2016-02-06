@@ -2,11 +2,13 @@
 
 CFLAGS = -Wall -g -lm
 
+Explore = orderofop
 CharPointFunc = strcat strend
 PointFuncArgs = getint getfloat
 
-all: $(PointFuncArgs) $(CharPointFunc)
+all: $(PointFuncArgs) $(CharPointFunc) $(Explore)
 
+orderofop:
 strend:
 strcat:
 getfloat:
