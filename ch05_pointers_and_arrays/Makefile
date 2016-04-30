@@ -2,7 +2,7 @@
 
 CFLAGS = -Wall -g -lm
 
-CmdLineArgs = polexpr entab detab
+CmdLineArgs = polexpr entab2 detab2 entab3 detab3
 PtrsToPtrs = sortlines sortlinesnoalloc ymd ymdptr
 Explore = orderofop
 CharPointFunc = strcat strend strn pointers
@@ -10,8 +10,10 @@ PointFuncArgs = getint getfloat
 
 all: $(PointFuncArgs) $(CharPointFunc) $(Explore) $(PtrsToPtrs) $(CmdLineArgs)
 
-detab:
-entab:
+detab3:
+entab3:
+detab2:
+entab2:
 polexpr:
 ymdptr:
 ymd:
